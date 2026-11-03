@@ -1,0 +1,5 @@
+responsable,ubicacion,ip,mac,hostname
+Redes,Rack principal,192.168.1.1,00:00:5E:00:53:01,ROUTER
+Direccion,Oficina 1,192.168.1.10,00:00:5E:00:53:10,PC-ADMIN
+Ventas,Oficina 2,192.168.1.20,00:00:5E:00:53:20,PC-VENTAS
+Administracion,Pasillo,192.168.1.30,00:00:5E:00:53:30,IMPRESORA

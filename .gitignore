@@ -1,0 +1,11 @@
+# Compilación
+build/
+*.exe
+*.o
+shadowasset
+tests/*.tmp
+
+# Salidas: pueden contener información sensible de la red
+reports/*.csv
+reports/*.json
+data/historial/*.csv

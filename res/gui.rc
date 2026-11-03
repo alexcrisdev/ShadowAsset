@@ -1,0 +1,28 @@
+// Recursos de la interfaz gráfica (se compila con windres).
+
+// 1 = CREATEPROCESS_MANIFEST_RESOURCE_ID, 24 = RT_MANIFEST
+1 24 "shadowasset.manifest"
+
+1 VERSIONINFO
+FILEVERSION     1,1,0,0
+PRODUCTVERSION  1,1,0,0
+FILEOS          0x40004
+FILETYPE        0x1
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "0c0a04b0"
+        BEGIN
+            VALUE "FileDescription",  "ShadowAsset - auditoria de activos de red"
+            VALUE "FileVersion",      "1.1.0"
+            VALUE "ProductName",      "ShadowAsset"
+            VALUE "ProductVersion",   "1.1.0"
+            VALUE "OriginalFilename", "shadowasset-gui.exe"
+            VALUE "LegalCopyright",   "Licencia MIT"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0c0a, 1200
+    END
+END

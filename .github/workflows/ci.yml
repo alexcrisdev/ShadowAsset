@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux (${{ matrix.cc }}) + sanitizers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cc: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar
+        run: make CC=${{ matrix.cc }}
+      - name: Pruebas unitarias
+        run: make test CC=${{ matrix.cc }}
+      - name: Pruebas con AddressSanitizer + UBSan
+        run: make asan CC=${{ matrix.cc }}
+      - name: Prueba de extremo a extremo
+        run: |
+          set +e
+          ./build/shadowasset compare data/baseline.csv data/actual_spoofing.csv \
+            --gateway 192.168.1.1 --report build/informe.json
+          test $? -eq 2 || exit 1
+          python3 -c "import json; d=json.load(open('build/informe.json')); assert d['alertas'][0]['severidad']=='ALTA'"
+
+  windows:
+    name: Windows (MSYS2 UCRT64)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          install: make mingw-w64-ucrt-x86_64-gcc
+      - name: Compilar
+        run: make
+      - name: Pruebas unitarias
+        run: make test
+      - name: Comandos basicos
+        run: |
+          ./build/shadowasset.exe version
+          ./build/shadowasset.exe show data/inventario.csv
+      - name: La interfaz grafica solo depende de DLL del sistema
+        run: |
+          test -f build/shadowasset-gui.exe
+          ! objdump -p build/shadowasset-gui.exe | grep "DLL Name" | grep -iE "libgcc|libwinpthread|msys"
+      - name: Publicar ejecutables
+        uses: actions/upload-artifact@v4
+        with:
+          name: shadowasset-windows
+          path: |
+            build/shadowasset.exe
+            build/shadowasset-gui.exe
